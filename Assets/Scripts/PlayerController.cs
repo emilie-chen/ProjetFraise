@@ -30,7 +30,7 @@ public sealed class PlayerController : MonoBehaviour
     private float roll = 0f;
     public GameObject cameraSubObject;
     // movement code
-    public float maximumPlayerMovementVelocity = 2f;
+    public float maximumPlayerMovementVelocity = 0.5f;
 
 
     private void Start()

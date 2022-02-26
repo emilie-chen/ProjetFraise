@@ -166,7 +166,7 @@ Camera:
   m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
+  m_FocalLength: 20.78461
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -175,7 +175,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -201,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.44, y: 1, z: -873.3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -420,6 +420,7 @@ GameObject:
   - component: {fileID: 1108038190}
   - component: {fileID: 1108038189}
   - component: {fileID: 1108038191}
+  - component: {fileID: 1108038192}
   m_Layer: 0
   m_Name: Player
   m_TagString: Gravity
@@ -499,7 +500,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108038184}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.44, y: 0, z: 863.3}
+  m_LocalPosition: {x: 12.44, y: 1593, z: 452}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -548,10 +549,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookSensitivity: 50
-  maximumSpeed: 10
-  maximumFinalSpeed: 100
-  maximumAcceleration: 1
-  ctFriction: 0.002
+  cameraSubObject: {fileID: 0}
+  maximumPlayerMovementVelocity: 10
+--- !u!114 &1108038192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108038184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 44513fe4d34694342a0b1487175e2d79,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 330585545}
 --- !u!1 &1195174017
 GameObject:
   m_ObjectHideFlags: 0
