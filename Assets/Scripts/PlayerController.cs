@@ -32,8 +32,8 @@ public sealed class PlayerController : MonoBehaviour
         {
             var gravitation = m_GravityData.gravitationOnMe;
             var up = select(
-                normalize(-gravitation), 
-                normalize(double3(transform.up)), 
+                normalize(double3(transform.up)),
+                normalize(-gravitation),
                 all(isfinite(gravitation)) && !issmall(gravitation));
             var faceForward = double3(transform.forward);
             var forward = normalize(projectonplane(faceForward, up));
@@ -43,14 +43,23 @@ public sealed class PlayerController : MonoBehaviour
             {
                 up = float3(up),
                 forward = float3(forward),
-                right = float3(right)
+                right = float3(right),
             };
         }
+    }
+
+    private void DrawFacing(in Facing facing)
+    {
+        var position = transform.position;
+        Debug.DrawRay(position, facing.up * 5.0f, Color.green);
+        Debug.DrawRay(position, facing.right * 5.0f, Color.red);
+        Debug.DrawRay(position, facing.forward * 5.0f, Color.blue);
     }
 
     private void FixedUpdate()
     {
         var facing = targetFacing;
+        DrawFacing(in facing);
         transform.up = facing.up;
     }
 }
