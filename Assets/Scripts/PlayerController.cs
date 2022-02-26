@@ -30,9 +30,13 @@ public sealed class PlayerController : MonoBehaviour
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            var up = normalize(-m_GravityData.gravitationOnMe);
+            var gravitation = m_GravityData.gravitationOnMe;
+            var up = select(
+                normalize(-gravitation), 
+                normalize(double3(transform.up)), 
+                all(isfinite(gravitation)) && !issmall(gravitation));
             var faceForward = double3(transform.forward);
-            var forward = normalize(projectOnPlane(faceForward, up));
+            var forward = normalize(projectonplane(faceForward, up));
             var right = normalize(cross(up, forward));
 
             return new()

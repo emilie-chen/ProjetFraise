@@ -1,9 +1,11 @@
+using System.Runtime.CompilerServices;
 using static Unity.Mathematics.math;
 using Unity.Mathematics;
 
 public static class Misc
 {
-    public static float3 projectOnPlane(float3 vector, float3 planeNormal)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static float3 projectonplane(float3 vector, float3 planeNormal)
     {
         var num1 = dot(planeNormal, planeNormal);
         if (num1 < (double) EPSILON)
@@ -14,7 +16,8 @@ public static class Misc
             vector.z - planeNormal.z * num2 / num1);
     }
 
-    public static double3 projectOnPlane(double3 vector, double3 planeNormal)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static double3 projectonplane(double3 vector, double3 planeNormal)
     {
         var num1 = dot(planeNormal, planeNormal);
         if (num1 < EPSILON_DBL)
@@ -24,4 +27,12 @@ public static class Misc
             vector.y - planeNormal.y * num2 / num1,
             vector.z - planeNormal.z * num2 / num1);
     }
+
+    public const float SMALL_THRESHOLD = EPSILON * 100.0f;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool issmall(float3 value) => length(value) < SMALL_THRESHOLD;
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool issmall(double3 value) => length(value) < SMALL_THRESHOLD;
 }
