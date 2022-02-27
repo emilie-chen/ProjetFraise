@@ -1,6 +1,8 @@
 using System.Runtime.CompilerServices;
 using static Unity.Mathematics.math;
+using static GravityData;
 using Unity.Mathematics;
+using UnityEngine;
 
 public static class Misc
 {
@@ -32,7 +34,20 @@ public static class Misc
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool issmall(float3 value) => length(value) < SMALL_THRESHOLD;
-    
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool issmall(double3 value) => length(value) < SMALL_THRESHOLD;
+
+    public static void PutIntoOrbit(GameObject center, GameObject satellite, float r)
+    {
+        var centerRb = center.GetComponent<Rigidbody>();
+        var satRb = satellite.GetComponent<Rigidbody>();
+        var M = centerRb.mass;
+        var v = (float) sqrt(G * M / r);
+        float3 centerPos = center.transform.position;
+        var centerToSat = normalize(float3(satellite.transform.position) - centerPos);
+        var newSatPos = centerPos + centerToSat * r;
+        satellite.transform.position = newSatPos;
+        satRb.velocity = cross(up(), centerToSat) * v;
+    }
 }

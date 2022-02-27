@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
+using UnityEditor;
 using static Unity.Mathematics.math;
+using static Misc;
 using UnityEngine;
 using double3 = Unity.Mathematics.double3;
 
@@ -56,5 +58,31 @@ public sealed class GravityData : MonoBehaviour
         gravitationOnMe = calculatedGravitationOnMe;
         m_RigidBody.AddForce(float3(gravitationOnMe));
         Debug.DrawRay(transform.position, float3(normalize(relativisticNetForce)) * 10.0f, Color.yellow);
+    }
+
+    [CustomEditor(typeof(GravityData))]
+    private class EditorScript : Editor
+    {
+        private GameObject center, satellite;
+        private float r;
+
+        private void Awake()
+        {
+            center = GameObject.Find("Sun");
+            satellite = GameObject.Find("Earth");
+            r = 5000;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            center = (GameObject) EditorGUILayout.ObjectField("Center", center, typeof(GameObject), true);
+            satellite = (GameObject) EditorGUILayout.ObjectField("Satellite", satellite, typeof(GameObject), true);
+            r = EditorGUILayout.FloatField("Orbit height", r);
+            if (GUILayout.Button("Orbit"))
+            {
+                PutIntoOrbit(center, satellite, r);
+            }
+        }
     }
 }
