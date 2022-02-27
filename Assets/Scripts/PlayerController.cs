@@ -46,6 +46,20 @@ public sealed class PlayerController : MonoBehaviour
     {
         inputActions ??= new();
         inputActions.Enable();
+        inputActions.Player.Jump.performed += eventCtx => OnJump();
+    }
+    
+    private void OnJump()
+    {
+        //velocity.y = Mathf.Sqrt(jumpHeight * -1f * gravity);var facing = targetFacing;
+        var facing = targetFacing;
+        var hit = new RaycastHit();
+        var ray = new Ray(transform.position, facing.down);
+        if (Physics.Raycast(ray,out hit,1,-1));
+        {
+            DrawFacing(in facing);
+            rb.AddForce(facing.up * 10000f  * rb.mass);    
+        }
     }
 
     private Facing targetFacing
