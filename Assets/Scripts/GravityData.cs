@@ -16,7 +16,7 @@ public sealed class GravityData : MonoBehaviour
         .AsEnumerable()
         .Where(go => go != gameObject);
 
-    public const double G = 6.67408e-2;
+    public const double G = 1.0f;
     public static double UniversalGravitation(double m1, double m2, double r) => G * m1 * m2 / pow(r, 2.0);
 
     public static double3 UniversalGravitationBetween(double4 me, double4 other) =>
@@ -55,5 +55,6 @@ public sealed class GravityData : MonoBehaviour
     {
         gravitationOnMe = calculatedGravitationOnMe;
         m_RigidBody.AddForce(float3(gravitationOnMe));
+        Debug.DrawRay(transform.position, float3(normalize(relativisticNetForce)) * 10.0f, Color.yellow);
     }
 }

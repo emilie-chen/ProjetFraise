@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using static Misc;
@@ -11,7 +12,8 @@ public sealed class PlayerController : MonoBehaviour
 {
     private GravityData m_GravityData;
     private InputActions inputActions;
-    private Rigidbody rb ;
+    private Rigidbody rb;
+
     private struct Facing
     {
         public float3 up;
@@ -21,14 +23,13 @@ public sealed class PlayerController : MonoBehaviour
         public float3 left => -right;
         public float3 back => -forward;
     }
-    
+
     public float lookSensitivity = 50f;
 
     private float pitch = 0f;
-    private float yaw = 0f;
 
-    private float roll = 0f;
     public GameObject cameraSubObject;
+
     // movement code
     public float maximumPlayerMovementVelocity = 0.5f;
 
@@ -38,11 +39,12 @@ public sealed class PlayerController : MonoBehaviour
         m_GravityData = GetComponent<GravityData>();
         cameraSubObject = GameObject.Find("Main Camera");
         rb = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void OnEnable()
     {
-        inputActions ??= new InputActions();
+        inputActions ??= new();
         inputActions.Enable();
     }
 
@@ -77,35 +79,25 @@ public sealed class PlayerController : MonoBehaviour
         Debug.DrawRay(position, facing.forward * 5.0f, Color.blue);
     }
     
-
-
     private void FixedUpdate()
     {
         var facing = targetFacing;
         DrawFacing(in facing);
-        transform.up = facing.up;
         
-        //Look code
-        //Rotating camera with look axis
-        var lookDelta = inputActions.Player.Look.ReadValue<Vector2>();
-        //if there is any new look
+        // look
+        float2 lookDelta = inputActions.Player.Look.ReadValue<Vector2>();
+        lookDelta *= lookSensitivity * Time.deltaTime;
+        pitch -= lookDelta.y;
+        pitch = Mathf.Clamp(pitch, -89f, 89f);
+        cameraSubObject.transform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+        var rot = Quaternion.FromToRotation(up(), facing.up);
+        rot.SetLookRotation(facing.forward + facing.right / 100.0f * lookDelta.x, facing.up);
+        transform.rotation = rot;
         
-        if (lookDelta.magnitude != 0)
-        {
-            lookDelta *= lookSensitivity * Time.deltaTime;
-
-            pitch -= lookDelta.y;
-            yaw += lookDelta.x;
-
-            pitch = Mathf.Clamp(pitch, -89f, 89f);
-
-            cameraSubObject.transform.localRotation = Quaternion.Euler(pitch, yaw, 0f);
-        }
-        
-        var moveDelta = inputActions.Player.Move.ReadValue<Vector2>();
-        
-        float3 moveDelta3 = (moveDelta.x * facing.forward + moveDelta.y * facing.right);
-        rb.AddForce(moveDelta3*maximumPlayerMovementVelocity);
-
+        // move
+        float2 moveDelta = inputActions.Player.Move.ReadValue<Vector2>();
+        var moveDir = moveDelta.y * facing.forward + moveDelta.x * facing.right;
+        Debug.DrawRay(transform.position, moveDir, Color.red);
+        rb.AddForce(moveDir * maximumPlayerMovementVelocity * rb.mass);
     }
 }
