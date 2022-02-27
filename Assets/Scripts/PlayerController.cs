@@ -13,7 +13,9 @@ public sealed class PlayerController : MonoBehaviour
     private GravityData m_GravityData;
     private InputActions inputActions;
     private Rigidbody rb;
-
+    public GameObject menuUI;
+    
+    
     private struct Facing
     {
         public float3 up;
@@ -40,6 +42,23 @@ public sealed class PlayerController : MonoBehaviour
         cameraSubObject = GameObject.Find("Main Camera");
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
+        
+    }
+
+    private void OnMenu()
+    {
+        if (menuUI.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            menuUI.SetActive(false);
+            Time.timeScale = 1;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            menuUI.SetActive(true);
+            Time.timeScale = 0.0f;
+        }
     }
 
     private void OnEnable()
@@ -47,6 +66,7 @@ public sealed class PlayerController : MonoBehaviour
         inputActions ??= new();
         inputActions.Enable();
         inputActions.Player.Jump.performed += eventCtx => OnJump();
+        inputActions.Player.Menu.performed += eventCtx => OnMenu();
     }
     
     private void OnJump()
@@ -61,6 +81,8 @@ public sealed class PlayerController : MonoBehaviour
             rb.AddForce(facing.up * 10000f  * rb.mass);    
         }
     }
+
+ 
 
     private Facing targetFacing
     {
