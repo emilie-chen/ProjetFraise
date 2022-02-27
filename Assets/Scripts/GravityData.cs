@@ -60,6 +60,7 @@ public sealed class GravityData : MonoBehaviour
         Debug.DrawRay(transform.position, float3(normalize(relativisticNetForce)) * 10.0f, Color.yellow);
     }
 
+#if UNITY_EDITOR
     [CustomEditor(typeof(GravityData))]
     private class EditorScript : Editor
     {
@@ -85,4 +86,5 @@ public sealed class GravityData : MonoBehaviour
             }
         }
     }
+#endif
 }
